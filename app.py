@@ -68,7 +68,7 @@ st.title("StreamShield: Network IDS")
 uploaded_file = st.file_uploader("Upload your Network Traffic CSV", type="csv")
 
 if uploaded_file:
-    df = pd.read_csv(uploaded_file)
+    df = pd.read_csv(uploaded_file,encoding='utf-8', encoding_errors='ignore')
 
     # ── NULL handling ──────────────────────────────────────────────────────────
     null_counts = df.isnull().sum()
@@ -78,7 +78,7 @@ if uploaded_file:
     # BUG FIX: use .index to get the actual index labels, not the sub-DataFrame
     null_rows = df[df["Protocol"].isnull()]
     if null_rows.empty:
-        st.success("✅ No NULL values found in 'Protocol' column.")
+        st.success("✅ No NULL values found in provided dataset column.")
     else:
         st.warning(f"⚠️ Dropping {len(null_rows)} row(s) with NULL 'Protocol'.")
         df = df.drop(index=null_rows.index).reset_index(drop=True)
